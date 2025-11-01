@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserNav } from "@/components/user-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -54,43 +55,44 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Auth Buttons / User Menu */}
-          <div className="hidden md:flex items-center gap-4 relative z-[60]">
+          {/* Auth Buttons / User Menu + Theme Toggle */}
+          <div className="hidden md:flex items-center gap-2 relative z-[60]">
+            <ThemeToggle />
             {!loading && (
               <>
                 {user ? (
                   <UserNav />
                 ) : (
                   <>
-            <Link href="/signin">
+                    <Link href="/signin">
                       <Button
                         variant={pathname === "/signin" ? "default" : "ghost"}
                         className="transition-all duration-300"
                       >
                         Sign In
                       </Button>
-            </Link>
-            <Link href="/signup">
+                    </Link>
+                    <Link href="/signup">
                       <Button
                         variant={pathname === "/signup" ? "default" : "ghost"}
                         className="transition-all duration-300"
                       >
                         Sign Up
                       </Button>
-            </Link>
+                    </Link>
                   </>
                 )}
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
+          {/* Mobile Menu Button + Theme Toggle */}
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -112,6 +114,13 @@ export function Navigation() {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-4">
+              {/* Theme Toggle for Mobile */}
+              <div className="md:hidden pb-2 border-b">
+                <div className="flex items-center justify-between px-2">
+                  <span className="text-sm font-medium">Theme</span>
+                  <ThemeToggle />
+                </div>
+              </div>
               {user ? (
                 <>
                   <Link
@@ -144,14 +153,14 @@ export function Navigation() {
                 </>
               ) : (
                 <>
-              <Link href="/signin">
-                <Button variant="ghost" className="w-full">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button className="w-full">Sign Up</Button>
-              </Link>
+                  <Link href="/signin">
+                    <Button variant="ghost" className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button className="w-full">Sign Up</Button>
+                  </Link>
                 </>
               )}
             </div>

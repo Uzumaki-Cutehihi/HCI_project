@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.post("/users/login", { email, password });
       const { token, user: userData } = response.data;
-      
+
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
@@ -118,4 +118,3 @@ export function useAuth() {
   }
   return context;
 }
-

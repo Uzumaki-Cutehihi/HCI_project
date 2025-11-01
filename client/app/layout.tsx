@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import "@/styles/globals.css";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,4 +39,3 @@ export default function RootLayout({
     </html>
   );
 }
-
