@@ -216,7 +216,7 @@ export default function GamePage() {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timerRef.current as NodeJS.Timeout);
-                    return 0; // Trả về 0 để useEffect bắt được
+                    return 0;
                 }
                 return prev - 1;
             });
@@ -235,7 +235,6 @@ export default function GamePage() {
     }, [timeLeft, mode, showResult, exercise, loading]);
 
     const loadExercise = async () => {
-        // 1. Dừng timer cũ và Reset thời gian NGAY LẬP TỨC để tránh lỗi logic
         if (timerRef.current) clearInterval(timerRef.current);
         setTimeLeft(20);
 
@@ -648,8 +647,7 @@ export default function GamePage() {
                                         </div>
                                     )}
                                 </div>
-
-                                {/* ĐÃ XÓA TEXT WORD MEANING Ở ĐÂY */}
+                                
 
                                 <div className="grid grid-cols-2 gap-4">
                                     {exercise.options.map((opt) => (
