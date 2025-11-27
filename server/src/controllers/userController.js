@@ -85,7 +85,6 @@ export const loginWithGoogle = async (req, res) => {
   try {
     const { name, email, googleId, avatar } = req.body;
 
-    // Kiểm tra xem user đã tồn tại chưa
     let user = await User.findOne({ email });
 
     if (user) {
