@@ -1,5 +1,20 @@
+import GameSession from "../models/GameSession.js";
+import UserAchievement from "../models/UserAchievement.js";
+import Achievement from "../models/Achievement.js";
+import UserProfile from "../models/UserProfile.js";
+
+// Lưu kết quả chơi game
 export const saveSession = async (req, res) => {
   try {
+    // FIX LỖI 500: Kiểm tra xem req.user có tồn tại không
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: Token không hợp lệ hoặc thiếu Middleware."
+      });
+    }
+
+    const userId = req.user.id;
     const {
       gameMode,
       difficulty,
@@ -10,60 +25,71 @@ export const saveSession = async (req, res) => {
       timeSpent = 0,
       exercises = [],
       answers = [],
-    } = req.body || {};
+    } = req.body;
 
-    const unlockedAchievements = [];
+    // Lưu vào DB
+    const newSession = await GameSession.create({
+      userId,
+      gameMode,
+      difficulty,
+      score,
+      correctAnswers,
+      wrongAnswers,
+      totalQuestions,
+      timeSpent,
+      exercises,
+      answers,
+      isCompleted: true,
+    });
 
-    if (score >= 50) {
-      unlockedAchievements.push({
-        name: "Score 50+",
-        description: "Đạt trên 50 điểm trong một phiên",
-        points: 10,
-      });
+    // Cập nhật thông tin UserProfile
+    const userProfile = await UserProfile.findOne({ userId });
+    if (userProfile) {
+      userProfile.totalScore += score;
+      userProfile.totalGamesPlayed += 1;
+      userProfile.totalCorrectAnswers += correctAnswers;
+      userProfile.totalWrongAnswers += wrongAnswers;
+      userProfile.lastPlayedAt = new Date();
+      await userProfile.save();
     }
 
-    if (correctAnswers >= 5) {
-      unlockedAchievements.push({
-        name: "5 câu đúng",
-        description: "Trả lời đúng 5 câu",
-        points: 5,
-      });
-    }
-
-    if (difficulty === "advanced" && score >= 30) {
-      unlockedAchievements.push({
-        name: "Advanced starter",
-        description: "Ghi điểm ở chế độ nâng cao",
-        points: 10,
-      });
-    }
 
     res.json({
       success: true,
-      message: "Session recorded",
-      data: {
-        gameMode,
-        difficulty,
-        score,
-        correctAnswers,
-        wrongAnswers,
-        totalQuestions,
-        timeSpent,
-        exercisesCount: Array.isArray(exercises) ? exercises.length : 0,
-        answersCount: Array.isArray(answers) ? answers.length : 0,
-      },
-      unlockedAchievements,
+      message: "Session saved successfully",
+      data: newSession,
     });
+
+  } catch (error) {
+    console.error("Error saving session:", error);
+    res.status(500).json({ success: false, message: "Lỗi lưu kết quả chơi game", error: error.message });
+  }
+};
+
+export const startSession = async (req, res) => {
+  res.json({ success: true, message: "Session started" });
+};
+
+
+export const getLeaderboard = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    const leaderboard = await UserProfile.find()
+        .sort({ totalScore: -1 })
+        .limit(parseInt(limit))
+        .populate("userId", "name avatar");
+    res.json({ success: true, leaderboard });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const getLeaderboard = async (req, res) => {
-  res.json({ success: true, leaderboard: [] });
-};
-
 export const getGameHistory = async (req, res) => {
-  res.json({ success: true, history: [] });
+  try {
+    const userId = req.user.id;
+    const history = await GameSession.find({ userId }).sort({ createdAt: -1 }).limit(20);
+    res.json({ success: true, history });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
-
