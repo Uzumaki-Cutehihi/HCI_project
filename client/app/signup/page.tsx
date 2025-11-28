@@ -108,25 +108,7 @@ export default function SignUpPage() {
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] grid md:grid-cols-2 overflow-hidden">
-            <motion.div
-                key="signup-image"
-                initial={{ opacity: 0, scale: 0.92, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                transition={{
-                    duration: 0.6,
-                    ease: [0.43, 0.13, 0.23, 0.96],
-                    delay: 0.1,
-                }}
-                className="hidden md:block relative bg-muted order-1"
-            >
-                <img
-                    src="https://www.shutterstock.com/image-vector/hearing-loss-symbol-american-sign-600nw-2441574545.jpg"
-                    alt="Student learning"
-                    className="absolute inset-0 h-full w-full object-cover"
-                />
-            </motion.div>
+        <div className="min-h-[calc(100vh-4rem)] overflow-hidden bg-center bg-cover bg-[url('/Đăng_nhập_(2).png')] ">
 
             <motion.div
                 key="signup-form"
@@ -142,9 +124,11 @@ export default function SignUpPage() {
             >
                 <div className="w-full max-w-md space-y-8">
                     <div>
-                        <h1 className="text-3xl font-bold">Welcome to SignLearn</h1>
+                        <h1 className="text-3xl font-bold">Chào mừng đến với {""}
+                            <span className="text-primary" style={{ color: "#043BB3" }}>SignLearn</span>
+                        </h1>
                         <p className="text-muted-foreground mt-2">
-                            Create your account to start learning sign language.
+                            Tạo tài khoản của bạn để bắt đầu hành trình học tập
                         </p>
                     </div>
 
@@ -191,11 +175,11 @@ export default function SignUpPage() {
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Tên</Label>
                                 <Input
                                     id="name"
                                     type="text"
-                                    placeholder="Enter your name"
+                                    placeholder="Nhập tên của bạn tại đây"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
@@ -207,7 +191,7 @@ export default function SignUpPage() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder="Nhập email của bạn tại đây"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -215,11 +199,11 @@ export default function SignUpPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Mật khẩu</Label>
                                 <Input
                                     id="password"
                                     type="password"
-                                    placeholder="Create a password"
+                                    placeholder="Tạo mật khẩu"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -227,11 +211,11 @@ export default function SignUpPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
                                 <Input
                                     id="confirmPassword"
                                     type="password"
-                                    placeholder="Confirm your password"
+                                    placeholder="Xác nhận mật khẩu của bạn"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
@@ -249,7 +233,7 @@ export default function SignUpPage() {
                                 htmlFor="remember"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
-                                Remember for 30 days
+                                Ghi nhớ mật khẩu
                             </label>
                         </div>
 
@@ -262,16 +246,16 @@ export default function SignUpPage() {
                             </div>
                         )}
                         <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Đang đăng ký..." : "Sign up"}
+                            {loading ? "Đang đăng ký..." : "Đăng ký"}
                         </Button>
 
                         <p className="text-center text-sm text-muted-foreground">
-                            Already have an account?{" "}
+                            Đã có tài khoản?{" "}
                             <Link
                                 href="/signin"
                                 className="font-medium text-primary hover:underline"
                             >
-                                Sign in
+                                Đăng nhập
                             </Link>
                         </p>
                     </form>
